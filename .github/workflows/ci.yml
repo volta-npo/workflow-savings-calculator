@@ -19,5 +19,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Run tests
-        run: npm test
+          cache: npm
+      - name: Install dependencies
+        run: npm install
+      - name: Build TypeScript
+        run: npm run build
+      - name: Run TypeScript tests
+        run: node --test test/*.test.js
+      - name: Run Python backend tests
+        if: hashFiles('backend/python/tests/*.py') != ''
+        run: PYTHONPATH=backend/python python3 -m unittest discover -s backend/python/tests
+      - name: Run Rust backend tests
+        if: hashFiles('backend/rust/Cargo.toml') != ''
+        run: cargo test --manifest-path backend/rust/Cargo.toml

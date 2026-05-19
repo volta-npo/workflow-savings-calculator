@@ -5,11 +5,14 @@
   "type": "module",
   "description": "Estimate whether an automation is actually worth building before a student pod spends time on it.",
   "scripts": {
-    "test": "node --test",
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && node --test test/*.test.js",
     "start": "python3 -m http.server 4173",
-    "validate": "node --test",
-    "certify": "node --test test/v3.test.js",
-    "test:all": "node --test"
+    "validate": "npm test",
+    "certify": "npm run build && node --test test/v3.test.js",
+    "test:all": "npm test",
+    "test:python": "PYTHONPATH=backend/python python3 -m unittest discover -s backend/python/tests",
+    "test:backend": "npm run test:python"
   },
   "keywords": [
     "ai-automation",
@@ -22,14 +25,18 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/volta-npo/32-workflow-savings-calculator.git"
+    "url": "git+https://github.com/volta-npo/workflow-savings-calculator.git"
   },
-  "homepage": "https://volta-npo.github.io/32-workflow-savings-calculator/",
+  "homepage": "https://volta-npo.github.io/workflow-savings-calculator/",
   "bugs": {
-    "url": "https://github.com/volta-npo/32-workflow-savings-calculator/issues"
+    "url": "https://github.com/volta-npo/workflow-savings-calculator/issues"
   },
   "author": "Volta OSS Division <volta.npo@gmail.com>",
   "engines": {
     "node": ">=20"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3",
+    "@types/node": "^24.0.0"
   }
 }

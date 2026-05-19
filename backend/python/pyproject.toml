@@ -1,0 +1,8 @@
+[project]
+name = "workflow-savings-calculator-backend"
+version = "0.1.0"
+description = "Backend evidence engine for Workflow Savings Calculator"
+requires-python = ">=3.9"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
