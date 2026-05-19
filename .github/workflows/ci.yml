@@ -38,3 +38,6 @@ jobs:
         run: git diff --exit-code -- src test
       - name: Production file audit
         run: test -f Dockerfile && test -f docker-compose.yml && test -f Makefile && test -f docs/DEPLOYMENT.md
+
+      - name: Build Docker image
+        run: docker build -t volta-oss/${{ github.event.repository.name }}:ci .
