@@ -1,0 +1,35 @@
+{
+  "name": "@volta-oss/workflow-savings-calculator",
+  "version": "3.0.0",
+  "private": false,
+  "type": "module",
+  "description": "Estimate whether an automation is actually worth building before a student pod spends time on it.",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 4173",
+    "validate": "node --test",
+    "certify": "node --test test/v3.test.js",
+    "test:all": "node --test"
+  },
+  "keywords": [
+    "ai-automation",
+    "digital-equity",
+    "local-first",
+    "oss",
+    "v3-production",
+    "volta"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/volta-npo/32-workflow-savings-calculator.git"
+  },
+  "homepage": "https://volta-npo.github.io/32-workflow-savings-calculator/",
+  "bugs": {
+    "url": "https://github.com/volta-npo/32-workflow-savings-calculator/issues"
+  },
+  "author": "Volta OSS Division <volta.npo@gmail.com>",
+  "engines": {
+    "node": ">=20"
+  }
+}

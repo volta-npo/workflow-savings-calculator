@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none';" />
+  <meta name="description" content="Estimate whether an automation is actually worth building before a student pod spends time on it." />
+  <title>Workflow Savings Calculator · Volta OSS</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <noscript><div class="panel" style="margin:1rem">This local-first workspace requires JavaScript to run calculators, exports, and certification tools.</div></noscript>
+  <header class="hero">
+    <nav class="nav" aria-label="Project">
+      <div class="brand"><span class="logo">V</span> VOLTA OSS</div>
+      <div><span id="repo-number"></span> · <span id="category"></span></div>
+    </nav>
+    <section class="hero-grid">
+      <div>
+        <p class="eyebrow" id="metric-label"></p>
+        <h1 id="app-title">Workflow Savings Calculator</h1>
+        <p class="tagline" id="app-tagline">Estimate whether an automation is actually worth building before a student pod spends time on it.</p>
+        <div class="pill-row" id="modules" role="list" aria-label="Modules"></div>
+      </div>
+      <aside class="hero-card" aria-label="Workflow">
+        <p class="eyebrow">Workflow</p>
+        <ul id="workflow"></ul>
+      </aside>
+    </section>
+  </header>
+
+  <main id="main-content" data-print-title="Workflow Savings Calculator · Volta OSS">
+    <section class="toolbar" aria-label="Workspace actions">
+      <div>
+        <strong>Local-first workspace</strong>
+        <div class="muted" id="autosave">Autosave ready</div>
+      </div>
+      <div class="button-row">
+        <button id="sample" class="secondary">Load Sample</button>
+        <button id="export-json">Export JSON</button>
+        <button id="export-md">Export Markdown</button>
+        <button id="copy-md" class="secondary">Copy Markdown</button>
+        <button id="print" class="secondary">Print Report</button>
+        <button id="reset" class="secondary">Reset</button>
+      </div>
+    </section>
+
+    <section class="grid">
+      <aside class="panel">
+        <h2>Project setup</h2>
+        <p class="muted" id="privacy-note"></p>
+        <form id="project-form" class="form-grid">
+          <label>Client / organization<input name="clientName" placeholder="e.g. Riverside Bakery" /></label>
+          <label>Volta chapter<input name="chapter" placeholder="Jacksonville" /></label>
+          <label>Student lead<input name="studentLead" placeholder="Lead name" /></label>
+          <label>Target user<input name="targetUser" /></label>
+          <label class="full">Notes<textarea name="notes" rows="4" placeholder="Discovery notes, constraints, owner needs..."></textarea></label>
+        </form>
+
+        <div class="panel score-card" style="margin-top:1rem">
+          <div class="score-ring" id="score-ring" role="meter" aria-label="Readiness score" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-live="polite"><strong id="score">0</strong></div>
+          <div><h2 id="score-label">Not ready</h2><p class="muted">Score updates from the rubric below.</p></div>
+        </div>
+
+        <div class="panel" style="margin-top:1rem">
+          <h2>Readiness warnings</h2>
+          <ul id="warnings" class="warning-list" aria-live="polite"></ul>
+        </div>
+
+        <form id="approval-form" class="panel approvals" style="margin-top:1rem">
+          <h2>Review gate</h2>
+          <label><input type="checkbox" name="studentReview" id="studentReview" /> Student review complete</label>
+          <label><input type="checkbox" name="mentorReview" id="mentorReview" /> Mentor / QA review complete</label>
+          <label><input type="checkbox" name="ownerApproval" id="ownerApproval" /> Owner / client approval complete</label>
+        </form>
+      </aside>
+
+      <section>
+        <div class="panel">
+          <h2>Production rubric</h2>
+          <div id="criteria"></div>
+        </div>
+
+        <div class="panel" style="margin-top:1rem">
+          <h2>Evidence locker</h2>
+          <div class="two-col no-print">
+            <label>Evidence title<input id="evidence-title" placeholder="Screenshot, interview, source..." /></label>
+            <label>Evidence detail<input id="evidence-detail" placeholder="What does it prove?" /></label>
+          </div>
+          <p class="no-print"><button id="add-evidence" class="secondary">Add Evidence</button></p>
+          <div id="evidence-list"></div>
+        </div>
+
+        <div class="panel" style="margin-top:1rem">
+          <h2>Next actions</h2>
+          <div id="actions"></div>
+        </div>
+      </section>
+    </section>
+  </main>
+  <footer class="footer">Designed in Jacksonville. Coded globally. Built for digital equity.</footer>
+  <script type="module" src="./src/app.js"></script>
+  <script type="module" src="./src/domain-app.js"></script>
+  <script type="module" src="./src/v1-app.js"></script>
+  <script type="module" src="./src/v3-app.js"></script>
+</body>
+</html>
