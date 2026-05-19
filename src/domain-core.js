@@ -89,4 +89,55 @@ export function applyDomainSample(domain) {
     state.rows = state.rows.map((row, index) => ({ ...row, value: `${row.label} completed with sample evidence`, score: index < 6 ? 9 : 8, approved: true }));
     return state;
 }
+export function createSaasBlueprint(domain, state) {
+    const calc = calculateDomain(domain, state);
+    const values = state.values || {};
+    const rows = state.rows || [];
+    const completedRows = rows.filter((row) => String(row.value || '').trim()).length;
+    const approvedRows = rows.filter((row) => row.approved).length;
+    const riskRows = rows.filter((row) => Number(row.score || 0) < 7 || !row.approved);
+    const primaryContact = values['owner-reviewer'] || values['organization-client'] || 'Client owner';
+    const stage = calc.releaseReady ? 'scale-ready' : calc.rowScore >= 60 ? 'implementation' : 'discovery';
+    const health = Math.round(calc.completeness * 0.28 + calc.rowScore * 0.42 + (approvedRows / Math.max(rows.length, 1)) * 30);
+    const playbooks = domain.saas?.playbooks || domain.artifacts.map((artifact) => `${artifact} production workflow`);
+    const automations = domain.saas?.automations || domain.checks.map((check) => `${check} guardrail`);
+    return {
+        stage,
+        health,
+        primaryContact,
+        completedRows,
+        approvedRows,
+        riskRows,
+        playbooks,
+        automations,
+        nextMilestones: [
+            `Complete ${Math.max(rows.length - completedRows, 0)} remaining ${domain.tableTitle.toLowerCase()} row(s).`,
+            `Approve ${Math.max(rows.length - approvedRows, 0)} row(s) with owner-safe evidence.`,
+            `Export ${domain.artifacts.join(', ')} for the client workspace.`
+        ],
+        revenueModel: domain.saas?.revenueModel || 'Seat-based workspace with client-safe export packs',
+        integrationTargets: domain.saas?.integrationTargets || ['CSV export', 'Markdown handoff', 'JSON bundle'],
+        riskRegister: riskRows.map((row) => `${row.label}: score ${row.score}/10${row.approved ? '' : ', approval pending'}`)
+    };
+}
+export function buildSaasMarkdown(config, domain, state) {
+    const blueprint = createSaasBlueprint(domain, state);
+    const lines = [`# ${config.title} SaaS Operating Blueprint`, '', `**Stage:** ${blueprint.stage}`, `**Workspace health:** ${blueprint.health}/100`, `**Primary contact:** ${blueprint.primaryContact}`, `**Revenue model:** ${blueprint.revenueModel}`, '', '## SaaS Modules'];
+    domain.modules?.forEach((module) => lines.push(`- **${module.name}:** ${module.description}`));
+    if (!domain.modules?.length)
+        domain.artifacts.forEach((artifact) => lines.push(`- **${artifact}:** Production-ready client deliverable.`));
+    lines.push('', '## Playbooks');
+    blueprint.playbooks.forEach((item) => lines.push(`- ${item}`));
+    lines.push('', '## Automation and integration targets');
+    blueprint.automations.forEach((item) => lines.push(`- ${item}`));
+    blueprint.integrationTargets.forEach((item) => lines.push(`- Integration: ${item}`));
+    lines.push('', '## Milestones');
+    blueprint.nextMilestones.forEach((item) => lines.push(`- ${item}`));
+    lines.push('', '## Risk register');
+    if (blueprint.riskRegister.length)
+        blueprint.riskRegister.forEach((item) => lines.push(`- ${item}`));
+    else
+        lines.push('- No current SaaS launch risks.');
+    return lines.join('\n');
+}
 //# sourceMappingURL=domain-core.js.map

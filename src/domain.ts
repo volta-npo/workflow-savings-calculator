@@ -76,7 +76,11 @@ export const domain = {
     "Build effort estimated",
     "Maintenance cost estimated",
     "Risk factors checked",
-    "Recommendation generated"
+    "Recommendation generated",
+    "Payload schema validated",
+    "Risk-adjusted ROI calculated",
+    "Sensitivity analysis completed",
+    "OpenAPI contract fixture passed"
   ],
   "artifacts": [
     "ROI brief",
@@ -88,5 +92,32 @@ export const domain = {
     "High-risk workflows cannot auto-greenlight",
     "Owner approval required"
   ],
-  "sampleClient": "BrightPath Tutoring Studio"
+  "sampleClient": "BrightPath Tutoring Studio",
+  "modules": [
+    { "name": "Payload schema validator", "description": "Required workflow fields, numeric bounds, risk flags, and owner approval requirements for API submissions." },
+    { "name": "Risk-adjusted ROI", "description": "Confidence-weighted savings, maintenance drag, failure risk, payback, and recommendation thresholds." },
+    { "name": "Sensitivity analysis", "description": "Low/base/high scenarios across volume, minutes saved, hourly rate, and build effort." },
+    { "name": "OpenAPI contract tests", "description": "Documented /score contract, request limits, fixture validation, and CLI parity checks." }
+  ],
+  "saas": {
+    "playbooks": [
+      "Automation intake ROI workflow",
+      "Risk-adjusted recommendation review",
+      "Sensitivity scenario workshop",
+      "OpenAPI/CLI fixture validation"
+    ],
+    "automations": [
+      "Payload schema validation",
+      "Risk-adjusted ROI calculation",
+      "Sensitivity scenario export",
+      "Request size and CORS guardrails"
+    ],
+    "revenueModel": "Automation portfolio SaaS with ROI seats, API scoring, scenario exports, and stakeholder approvals",
+    "integrationTargets": [
+      "Zapier/Make intake exports",
+      "Google Sheets scenario packs",
+      "Python API /score",
+      "OpenAPI contract docs"
+    ]
+  }
 };

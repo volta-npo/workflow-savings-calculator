@@ -90,3 +90,10 @@ textarea { resize:vertical; }
 @media print{main::before{content:attr(data-print-title);display:block;font-size:1.4rem;font-weight:900;margin-bottom:1rem}.domain-tool,.v1,.v3{break-inside:avoid}.domain-layout,.v1-grid,.v3-grid{grid-template-columns:1fr}.table-wrap{overflow:visible}.domain-table,.v1-table{min-width:0}}
 @media(forced-colors:active){button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid ButtonText}.score-ring{border:2px solid ButtonText}}
 
+
+.saas-console { margin:1rem 0; padding:1rem; border:1px solid var(--line); border-radius:1.25rem; background:rgba(255,255,255,.54); }
+.saas-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.75rem; }
+.saas-grid article { border:1px solid var(--line); border-radius:1rem; padding:.8rem; background:white; display:grid; gap:.25rem; }
+.saas-grid strong { font-size:1.25rem; letter-spacing:-.04em; }
+.saas-grid span { color:var(--muted); font-size:.82rem; font-weight:800; }
+@media (max-width:900px){ .saas-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }

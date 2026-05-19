@@ -24,3 +24,18 @@ export declare function applyDomainSample(domain: any): {
     generated: any[];
     updatedAt: string;
 };
+export declare function createSaasBlueprint(domain: any, state: any): {
+    stage: string;
+    health: number;
+    primaryContact: any;
+    completedRows: any;
+    approvedRows: any;
+    riskRows: any;
+    playbooks: any;
+    automations: any;
+    nextMilestones: string[];
+    revenueModel: any;
+    integrationTargets: any;
+    riskRegister: any;
+};
+export declare function buildSaasMarkdown(config: any, domain: any, state: any): string;

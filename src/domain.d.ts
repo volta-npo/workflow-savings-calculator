@@ -23,4 +23,14 @@ export declare const domain: {
     artifacts: string[];
     checks: string[];
     sampleClient: string;
+    modules: {
+        name: string;
+        description: string;
+    }[];
+    saas: {
+        playbooks: string[];
+        automations: string[];
+        revenueModel: string;
+        integrationTargets: string[];
+    };
 };
