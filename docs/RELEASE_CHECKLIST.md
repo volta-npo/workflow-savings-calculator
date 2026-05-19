@@ -1,4 +1,4 @@
-# v3 Release Checklist
+# release Release Checklist
 
 - [ ] Core workflow completes from empty state to export
 - [ ] Sample data demonstrates realistic Volta field usage
@@ -11,7 +11,7 @@
 - [ ] Keyboard-accessible controls present
 - [ ] Owner/mentor review gates represented
 - [ ] Evidence required for launch-ready claims
-- [ ] Production certification hash generated
+- [ ] Release certification hash generated
 - [ ] Monthly Savings reaches production threshold
 - [ ] Payback Period is documented with evidence
 - [ ] Fragility Risk has no unresolved blocker

@@ -5,22 +5,22 @@ import { v3 } from '../src/v3.js';
 import { validateV3Definition, createV3State, calculateV3Certification, v3Warnings, certifyAllV3, exportV3Bundle, importV3Bundle, buildV3Markdown, buildV3Csv, integrityHash, stableStringify, runV3SelfAudit } from '../src/v3-core.js';
 test('v3 definition meets production schema depth', () => {
     assert.equal(validateV3Definition(v3), true);
-    assert.equal(v3.productTier, 'v3-production');
+    assert.equal(v3.productTier, 'release');
     assert.ok(v3.releaseChecklist.length >= 12);
     assert.ok(v3.qualityGates.length >= 8);
     assert.ok(v3.schemas.length >= 6);
 });
-test('v3 initial state is intentionally not production certified', () => {
+test('v3 initial state is intentionally not release certified', () => {
     const state = createV3State(v3, '2026-01-01T00:00:00.000Z');
     const cert = calculateV3Certification(v3, state);
     assert.equal(state.checklist.length, v3.releaseChecklist.length);
-    assert.notEqual(cert.status, 'production-certified');
+    assert.notEqual(cert.status, 'release-certified');
     assert.ok(v3Warnings(v3, state).length > 0);
 });
-test('certifyAllV3 produces production certification', () => {
+test('certifyAllV3 produces release certification', () => {
     const state = certifyAllV3(v3, createV3State(v3, '2026-01-01T00:00:00.000Z'));
     const cert = calculateV3Certification(v3, state);
-    assert.equal(cert.status, 'production-certified');
+    assert.equal(cert.status, 'release-certified');
     assert.equal(cert.certification, 100);
     assert.equal(v3Warnings(v3, state).length, 0);
 });
@@ -67,24 +67,24 @@ test('v3 self audit reports bundle and export health', () => {
     const state = certifyAllV3(v3, createV3State(v3));
     const audit = runV3SelfAudit(config, v3, state);
     assert.equal(audit.definition, true);
-    assert.equal(audit.certification.status, 'production-certified');
+    assert.equal(audit.certification.status, 'release-certified');
     assert.ok(audit.markdownBytes > 1000);
     assert.equal(audit.csvRows, v3.releaseChecklist.length + 1);
     assert.ok(audit.bundleHash.length >= 8);
 });
-test('v3 blocked gate prevents production certification', () => {
+test('v3 blocked gate prevents release certification', () => {
     const state = certifyAllV3(v3, createV3State(v3));
     state.checklist[0].status = 'blocked';
     const cert = calculateV3Certification(v3, state);
-    assert.notEqual(cert.status, 'production-certified');
+    assert.notEqual(cert.status, 'release-certified');
     assert.ok(v3Warnings(v3, state).some((w) => /blocked/i.test(w)));
 });
-test('v3 critical open gate prevents production certification', () => {
+test('v3 critical open gate prevents release certification', () => {
     const state = certifyAllV3(v3, createV3State(v3));
     state.checklist[0].status = 'draft';
     state.checklist[0].severity = 'critical';
     const cert = calculateV3Certification(v3, state);
-    assert.notEqual(cert.status, 'production-certified');
+    assert.notEqual(cert.status, 'release-certified');
     assert.ok(v3Warnings(v3, state).some((w) => /critical/i.test(w)));
 });
 test('v3 import rejects invalid status enum', () => {

@@ -21,8 +21,8 @@ export function validateV3Definition(v3) {
         if (!v3[key])
             throw new Error(`missing v3.${key}`);
     }
-    if (v3.productTier !== 'v3-production')
-        throw new Error('product tier must be v3-production');
+    if (v3.productTier !== 'release')
+        throw new Error('product tier must be release');
     if (v3.releaseChecklist.length < 12)
         throw new Error('v3 release checklist must have at least 12 items');
     if (v3.qualityGates.length < 8)
@@ -48,7 +48,7 @@ export function createV3State(v3, now = new Date().toISOString()) {
             severity: index % 4 === 0 ? 'critical' : index % 3 === 0 ? 'high' : 'normal'
         })),
         incidents: [],
-        changelog: [{ version: '3.0.0', date: now.slice(0, 10), notes: 'Initial v3 production release candidate.' }],
+        changelog: [{ version: '3.0.0', date: now.slice(0, 10), notes: 'Initial release release candidate.' }],
         decisions: []
     };
 }
@@ -66,7 +66,7 @@ export function calculateV3Certification(v3, state) {
     const certification = Math.max(0, Math.min(100, Math.round(weighted * 0.55 + evidenceScore * 0.25 + (verified / total * 100) * 0.2 - blocked * 12 - criticalOpen * 8)));
     return {
         certification,
-        status: certification >= 95 && blocked === 0 && criticalOpen === 0 ? 'production-certified' : certification >= 85 ? 'release-candidate' : 'not-certified',
+        status: certification >= 95 && blocked === 0 && criticalOpen === 0 ? 'release-certified' : certification >= 85 ? 'release-candidate' : 'not-certified',
         certified,
         verified,
         blocked,
@@ -80,7 +80,7 @@ export function v3Warnings(v3, state) {
     const c = calculateV3Certification(v3, state);
     const warnings = [];
     if (c.certification < 95)
-        warnings.push(`Certification is ${c.certification}/100. v3 production requires 95+.`);
+        warnings.push(`Certification is ${c.certification}/100. release requires 95+.`);
     if (c.blocked)
         warnings.push(`${c.blocked} blocked launch gate(s) remain.`);
     if (c.criticalOpen)
@@ -105,9 +105,9 @@ export function certifyAllV3(v3, state) {
             status: 'certified',
             owner: row.owner || 'Release owner',
             evidence: row.evidence || `Certified evidence for ${row.label}`,
-            notes: row.notes || `${row.label} passed the v3 production gate.`
+            notes: row.notes || `${row.label} passed the release gate.`
         })),
-        decisions: [...(state.decisions || []), { date: new Date().toISOString(), decision: 'Certified all v3 production gates for launch candidate.' }]
+        decisions: [...(state.decisions || []), { date: new Date().toISOString(), decision: 'Certified all release gates for launch candidate.' }]
     };
 }
 export function exportV3Bundle(config, v3, state) {

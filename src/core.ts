@@ -143,7 +143,7 @@ export function applySampleData(config) {
     ...item,
     status: index < 2 ? 'approved' : index < 5 ? 'ready' : 'in-progress',
     evidence: `${config.sample.evidencePrefix} evidence ${index + 1}`,
-    notes: config.criteria[index]?.prompt || ''
+    notes: config.criteria[index]?.guidance || ''
   }));
   state.evidence = config.sample.evidence.map((detail, index) => ({ id: `evidence-${index + 1}`, title: `Evidence ${index + 1}`, detail }));
   state.approvals.studentReview = true;

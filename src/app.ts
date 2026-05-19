@@ -72,7 +72,7 @@ function criterionTemplate(item) {
   return `<article class="criterion">
     <div>
       <strong>${escapeHtml(item.label)}</strong>
-      <p>${escapeHtml(item.prompt)}</p>
+      <p>${escapeHtml(item.guidance)}</p>
     </div>
     <div class="criterion-meta"><span>${item.points}/${item.max} pts</span></div>
     <label>Status

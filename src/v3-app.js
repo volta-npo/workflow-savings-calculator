@@ -16,10 +16,10 @@ function save() { state.updatedAt = new Date().toISOString(); localStorage.setIt
 function download(name, content, type = 'text/plain') { const blob = new Blob([content], { type }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = name; a.click(); URL.revokeObjectURL(url); }
 function installV3() {
     document.querySelector('main').insertAdjacentHTML('beforeend', `
-    <section class="v3 panel" aria-label="v3 production certification">
+    <section class="v3 panel" aria-label="release certification">
       <div class="v3-head">
         <div>
-          <p class="eyebrow">v3.0 production certification</p>
+          <p class="eyebrow">v3.0 release certification</p>
           <h2>${esc(v3.productName)} Production Console</h2>
           <p class="muted">Release gates, integrity hash, import/export round trips, operations docs, and launch certification.</p>
         </div>
@@ -45,7 +45,7 @@ function installV3() {
 function bindV3Static() {
     $('#v3-certify').addEventListener('click', () => { if (!confirm('Load demo sample data? This pre-fills all gates for preview only \u2014 real certification requires real evidence.'))
         return; state = certifyAllV3(v3, state); save(); renderV3(); });
-    $('#v3-json').addEventListener('click', () => download(`${config.slug}-v3-production-bundle.json`, JSON.stringify(exportV3Bundle(config, v3, state), null, 2), 'application/json'));
+    $('#v3-json').addEventListener('click', () => download(`${config.slug}-release-bundle.json`, JSON.stringify(exportV3Bundle(config, v3, state), null, 2), 'application/json'));
     $('#v3-md').addEventListener('click', () => download(`${config.slug}-v3-certification.md`, buildV3Markdown(config, v3, state), 'text/markdown'));
     $('#v3-csv').addEventListener('click', () => download(`${config.slug}-v3-gates.csv`, buildV3Csv(v3, state), 'text/csv'));
     $('#v3-import').addEventListener('change', async (event) => {

@@ -23,7 +23,7 @@ export declare const config: {
         label: string;
         weight: number;
         defaultStatus: string;
-        prompt: string;
+        guidance: string;
     }[];
     templates: {
         actions: string[];
