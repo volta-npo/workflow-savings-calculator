@@ -1,0 +1,28 @@
+services:
+  app:
+    build: .
+    image: volta-oss/workflow-savings-calculator:local
+    ports:
+      - "4173:8080"
+    env_file:
+      - .env.example
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+  python-backend:
+    image: python:3.12-slim
+    working_dir: /app
+    volumes:
+      - .:/app:ro
+    command: python -m workflow_savings_calculator_backend.server
+    environment:
+      PYTHONPATH: /app/backend/python
+      VOLTA_BACKEND_HOST: 0.0.0.0
+      VOLTA_BACKEND_PORT: 8787
+    ports:
+      - "8787:8787"
+    security_opt:
+      - no-new-privileges:true

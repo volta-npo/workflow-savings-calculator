@@ -1,0 +1,28 @@
+{
+  "name": "Workflow Savings Calculator Dev",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:22",
+  "features": {
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.12"
+    },
+    "ghcr.io/devcontainers/features/rust:1": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+  "postCreateCommand": "npm install && npm run build",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "rust-lang.rust-analyzer",
+        "ms-python.python"
+      ]
+    }
+  },
+  "forwardPorts": [
+    4173,
+    8787,
+    8788
+  ]
+}

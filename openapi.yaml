@@ -1,0 +1,28 @@
+openapi: 3.1.0
+info:
+  title: "Workflow Savings Calculator API"
+  version: "1.0.0"
+  description: "Backend API for Estimate whether an automation is actually worth building before a student pod spends time on it."
+servers:
+  - url: http://127.0.0.1:8787
+    description: Python backend
+paths:
+  /health:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: Product identity and health status
+  /score:
+    post:
+      summary: Score evidence payload
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Release packet
+ 

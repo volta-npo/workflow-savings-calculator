@@ -174,6 +174,22 @@ This project now includes a backend-grade engine because the workflow benefits f
 
 ---
 
+## 🏗️ Production infrastructure
+
+This repo is designed to be usable as a real OSS product, not just a static demo.
+
+| Layer | Included |
+|---|---|
+| Reproducible build | `package-lock.json`, `npm ci`, TypeScript build artifacts |
+| Local runtime | Static app via `npm start` |
+| Container runtime | `Dockerfile`, `docker-compose.yml`, hardened Nginx config |
+| Developer environment | `.devcontainer/devcontainer.json` |
+| Operations | `Makefile`, `.env.example`, deployment docs, API docs |
+| CI/CD | GitHub Actions CI, release artifact workflow, Dependabot |
+| Backend | Python HTTP evidence API |
+
+---
+
 ## 🛠️ Quick start
 
 ```bash

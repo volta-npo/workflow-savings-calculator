@@ -1,0 +1,30 @@
+name: Release
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  release-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run test:backend --if-present
+      - name: Package release artifact
+        run: tar --exclude=.git --exclude=node_modules -czf workflow-savings-calculator-release.tar.gz .
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: workflow-savings-calculator-release
+          path: workflow-savings-calculator-release.tar.gz

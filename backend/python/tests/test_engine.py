@@ -22,3 +22,10 @@ class BackendEngineTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ServerModuleTests(unittest.TestCase):
+    def test_health_handler_exists(self):
+        from workflow_savings_calculator_backend.server import Handler
+        self.assertTrue(hasattr(Handler, "do_GET"))
+        self.assertTrue(hasattr(Handler, "do_POST"))

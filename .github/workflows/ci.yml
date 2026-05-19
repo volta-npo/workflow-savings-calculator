@@ -21,9 +21,11 @@ jobs:
           node-version: '22'
           cache: npm
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Build TypeScript
         run: npm run build
+      - name: Typecheck
+        run: npm run typecheck
       - name: Run TypeScript tests
         run: node --test test/*.test.js
       - name: Run Python backend tests
@@ -32,3 +34,7 @@ jobs:
       - name: Run Rust backend tests
         if: hashFiles('backend/rust/Cargo.toml') != ''
         run: cargo test --manifest-path backend/rust/Cargo.toml
+      - name: Check generated JavaScript is current
+        run: git diff --exit-code -- src test
+      - name: Production file audit
+        run: test -f Dockerfile && test -f docker-compose.yml && test -f Makefile && test -f docs/DEPLOYMENT.md
