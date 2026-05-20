@@ -940,3 +940,287 @@ main section > h3 + p {
   .panel, .hero-card, .toolbar, .score-card, .pill, .stat-grid > * { box-shadow: none !important; }
   main { width: 100%; padding: 0 1rem; }
 }
+
+/* ----------------------------------------------------------------
+ * SaaS console panel
+ * Rendered by src/saas-app.* in many Volta workbenches. Selectors
+ * stay generic so any .saas-* container inherits Volta tokens.
+ * ---------------------------------------------------------------- */
+.saas-console {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: var(--volta-surface);
+  border: 2px solid var(--volta-dark);
+  box-shadow: var(--shadow-neo);
+}
+
+.saas-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  border-bottom: 2px solid var(--volta-dark);
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+}
+
+.saas-title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--volta-dark);
+  margin: 0;
+}
+
+.saas-score {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.saas-score article {
+  border: 2px solid var(--volta-dark);
+  background: var(--volta-dark);
+  color: var(--volta-surface);
+  padding: 1rem;
+  box-shadow: var(--shadow-neo);
+}
+
+.saas-score article:nth-child(even) {
+  background: var(--volta-accent);
+  color: var(--volta-dark);
+}
+
+.saas-score strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+}
+
+.saas-score span {
+  display: block;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.7rem;
+  margin-bottom: 0.5rem;
+}
+
+.saas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.saas-cards,
+.saas-list,
+.saas-playbook,
+.saas-playbooks,
+.saas-features,
+.saas-experiments,
+.saas-integrations,
+.saas-jobs,
+.saas-journeys,
+.saas-metrics,
+.saas-modules,
+.saas-personas,
+.saas-plans,
+.saas-risks,
+.saas-roadmap,
+.saas-summary,
+.saas-warnings,
+.saas-workflow,
+.saas-workspaces,
+.saas-accounts,
+.saas-assets,
+.saas-automations,
+.saas-blueprint,
+.saas-brief,
+.saas-csv,
+.saas-experiments,
+.saas-governance,
+.saas-onboarding,
+.saas-ops,
+.saas-roles,
+.saas-success {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.saas-cards article,
+.saas-list article,
+.saas-playbook article,
+.saas-features article,
+.saas-experiments article,
+.saas-personas article,
+.saas-plans article,
+.saas-risks article,
+.saas-warnings article,
+.saas-summary article,
+.saas-modules article,
+.saas-workspaces article,
+.saas-accounts article,
+.saas-assets article,
+.saas-automations article,
+.saas-blueprint article,
+.saas-governance article,
+.saas-onboarding article,
+.saas-roles article,
+.saas-success article,
+.saas-roadmap article,
+.saas-jobs article,
+.saas-integrations article,
+.saas-journeys article,
+.saas-metrics article,
+.saas-playbooks article {
+  border: 2px solid var(--volta-dark);
+  background: var(--volta-surface);
+  padding: 1rem;
+  box-shadow: var(--shadow-neo-sm);
+}
+
+.saas-cards article strong,
+.saas-list article strong,
+.saas-playbook article strong,
+.saas-features article strong,
+.saas-experiments article strong,
+.saas-personas article strong,
+.saas-warnings article strong,
+.saas-summary article strong,
+.saas-modules article strong {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.saas-cards article p,
+.saas-list article p,
+.saas-playbook article p,
+.saas-features article p,
+.saas-experiments article p,
+.saas-personas article p,
+.saas-warnings article p,
+.saas-summary article p,
+.saas-modules article p {
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+.saas-cards article span,
+.saas-cards article small,
+.saas-list article span,
+.saas-list article small,
+.saas-playbook article span,
+.saas-playbook article small,
+.saas-features article span,
+.saas-features article small,
+.saas-experiments article span,
+.saas-experiments article small,
+.saas-personas article span,
+.saas-personas article small,
+.saas-summary article span,
+.saas-summary article small,
+.saas-warnings article span,
+.saas-warnings article small,
+.saas-modules article span,
+.saas-modules article small {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--volta-stone-600);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.saas-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.saas-table th {
+  background: var(--volta-dark);
+  color: var(--volta-surface);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.7rem;
+  padding: 0.75rem;
+  text-align: left;
+  border: 1px solid var(--volta-dark);
+}
+
+.saas-table td {
+  padding: 0.75rem;
+  border: 1px solid var(--volta-dark);
+  font-size: 0.9rem;
+  background: var(--volta-surface);
+}
+
+.saas-control,
+.saas-controls,
+.saas-actions,
+.saas-export,
+.saas-import,
+.saas-add {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 0.75rem 0;
+}
+
+.saas-csv,
+.saas-md,
+.saas-ops-csv,
+.saas-workspace-bundle,
+.saas-sample {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  background: var(--volta-stone-50);
+  border: 2px solid var(--volta-dark);
+  padding: 0.75rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin-top: 0.75rem;
+  max-height: 320px;
+  overflow: auto;
+  display: block;
+}
+
+.saas-active {
+  outline: 3px solid var(--volta-accent);
+  outline-offset: 2px;
+}
+
+.saas-metric {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+.saas-metric strong {
+  font-size: 1.5rem;
+  letter-spacing: -0.03em;
+}
+
+.saas-metric span {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: var(--volta-stone-600);
+  font-weight: 600;
+}
