@@ -29,6 +29,7 @@ ARTIFACTS = [
   "Scenario CSV",
   "Build/no-build memo"
 ]
+APPROVAL_ROLES = ("owner", "technical_lead", "mentor")
 REQUIRED_WORKFLOW_FIELDS = {
     "monthly_volume": (0, 1_000_000),
     "minutes_per_item": (0, 10_000),
@@ -38,6 +39,23 @@ REQUIRED_WORKFLOW_FIELDS = {
     "confidence_percent": (0, 100),
     "failure_risk_percent": (0, 100),
 }
+
+def approval_matrix(payload: Mapping[str, Any]) -> dict[str, Any]:
+    workflow = payload.get("workflow", {}) if isinstance(payload.get("workflow", {}), Mapping) else {}
+    approvals = workflow.get("approvals", {})
+    if not isinstance(approvals, Mapping):
+        approvals = {}
+    risk = workflow_number(workflow, "failure_risk_percent", 20)
+    contains_sensitive_data = bool(workflow.get("contains_sensitive_data"))
+    required_roles = list(APPROVAL_ROLES if risk >= 35 or contains_sensitive_data else ("owner", "mentor"))
+    decisions = {role: bool(approvals.get(role) or (role == "owner" and workflow.get("owner_approval"))) for role in required_roles}
+    missing = [role for role, approved in decisions.items() if not approved]
+    return {
+        "required_roles": required_roles,
+        "decisions": decisions,
+        "approved": not missing,
+        "missing": missing,
+    }
 
 @dataclass(frozen=True)
 class EvidenceItem:
@@ -106,6 +124,9 @@ def validate_payload(payload: Mapping[str, Any]) -> list[str]:
                 errors.append(f"workflow.{field} must be between {minimum} and {maximum}")
     if workflow.get("contains_sensitive_data") and not workflow.get("owner_approval"):
         errors.append("owner_approval is required for workflows with sensitive data")
+    approvals = approval_matrix(payload)
+    if approvals["missing"] and (workflow.get("contains_sensitive_data") or workflow_number(workflow, "failure_risk_percent", 0) >= 35):
+        errors.append(f"missing required approvals: {', '.join(approvals['missing'])}")
     return errors
 
 
@@ -156,6 +177,47 @@ def sensitivity_analysis(payload: Mapping[str, Any]) -> list[dict[str, Any]]:
     return scenarios
 
 
+def portfolio_rank(payload: Mapping[str, Any]) -> list[dict[str, Any]]:
+    candidates = payload.get("candidates", [])
+    if not isinstance(candidates, list):
+        candidates = []
+    ranked = []
+    for index, candidate in enumerate(candidates[:25]):
+        if not isinstance(candidate, Mapping):
+            continue
+        candidate_payload = {"workflow": dict(candidate)}
+        roi = calculate_roi(candidate_payload)
+        risk = workflow_number(candidate_payload["workflow"], "failure_risk_percent", 20)
+        effort = workflow_number(candidate_payload["workflow"], "build_hours", 40)
+        score = round(roi["risk_adjusted_monthly_savings"] - (risk * 5) - effort)
+        ranked.append({
+            "name": str(candidate.get("name", f"Workflow {index + 1}")),
+            "score": score,
+            "recommendation": roi["recommendation"],
+            "payback_months": roi["payback_months"],
+            "risk_adjusted_monthly_savings": roi["risk_adjusted_monthly_savings"],
+        })
+    ranked.sort(key=lambda item: item["score"], reverse=True)
+    return ranked
+
+
+def implementation_readiness(payload: Mapping[str, Any]) -> dict[str, Any]:
+    workflow = payload.get("workflow", {}) if isinstance(payload.get("workflow", {}), Mapping) else {}
+    checks = {
+        "data_access_confirmed": bool(workflow.get("data_access_confirmed")),
+        "rollback_owner_assigned": bool(workflow.get("rollback_owner")),
+        "exception_path_documented": bool(workflow.get("exception_path")),
+        "support_owner_assigned": bool(workflow.get("support_owner")),
+        "verification_plan_defined": bool(workflow.get("verification_plan")),
+    }
+    completed = sum(1 for value in checks.values() if value)
+    return {
+        "score": round(100 * completed / len(checks)),
+        "ready": completed == len(checks),
+        "checks": checks,
+    }
+
+
 def build_release_packet(payload: Mapping[str, Any]) -> dict[str, Any]:
     validation_errors = validate_payload(payload)
     items = summarize_rows(payload)
@@ -172,6 +234,9 @@ def build_release_packet(payload: Mapping[str, Any]) -> dict[str, Any]:
         "items": [asdict(item) for item in items],
         "workflow_roi": roi,
         "sensitivity": sensitivity_analysis(payload),
+        "approval_matrix": approval_matrix(payload),
+        "portfolio_rank": portfolio_rank(payload),
+        "implementation_readiness": implementation_readiness(payload),
         "schema": {"required_workflow_fields": sorted(REQUIRED_WORKFLOW_FIELDS.keys()), "row_limit": 100},
         "release_hash": digest,
     }
