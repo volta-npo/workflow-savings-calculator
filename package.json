@@ -6,6 +6,8 @@
   "description": "Estimate whether an automation is actually worth building before a student pod spends time on it.",
   "scripts": {
     "build": "tsc -p tsconfig.json",
+    "lint": "npm run typecheck",
+    "format:check": "node scripts/check-format.js",
     "test": "npm run build && node --test test/*.test.js",
     "start": "python3 -m http.server 4173",
     "validate": "npm test",
@@ -14,7 +16,7 @@
     "test:python": "PYTHONPATH=backend/python python3 -m unittest discover -s backend/python/tests",
     "test:backend": "npm run test:python",
     "clean": "rm -f src/*.js src/*.js.map src/*.d.ts test/*.js test/*.js.map test/*.d.ts",
-    "ci": "npm ci && npm test && npm run test:backend --if-present",
+    "ci": "npm ci && npm run format:check && npm test && npm run test:backend --if-present",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "docker:build": "docker build -t volta-oss/workflow-savings-calculator:local .",
     "docker:run": "docker compose up --build",

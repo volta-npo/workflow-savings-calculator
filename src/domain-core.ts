@@ -85,3 +85,135 @@ export function applyDomainSample(domain) {
   state.rows = state.rows.map((row, index) => ({...row, value: `${row.label} completed with sample evidence`, score: index < 6 ? 9 : 8, approved: true}));
   return state;
 }
+
+function asList(value, fallback = []) {
+  return Array.isArray(value) && value.length ? value : fallback;
+}
+
+export function createSaasBlueprint(domain, state) {
+  const calc = calculateDomain(domain, state);
+  const values = state.values || {};
+  const rows = state.rows || [];
+  const completedRows = rows.filter((row) => String(row.value || '').trim()).length;
+  const approvedRows = rows.filter((row) => row.approved).length;
+  const riskRows = rows.filter((row) => Number(row.score || 0) < 7 || !row.approved);
+  const primaryContact = values['owner-reviewer'] || values['organization-client'] || 'Client owner';
+  const stage = calc.releaseReady ? 'scale-ready' : calc.rowScore >= 60 ? 'implementation' : 'discovery';
+  const health = Math.round(calc.completeness * 0.28 + calc.rowScore * 0.42 + (approvedRows / Math.max(rows.length, 1)) * 30);
+  const modules = asList(domain.modules, domain.artifacts.map((artifact) => ({ name: artifact, description: 'Production-ready client deliverable.' })));
+  const playbooks = domain.saas?.playbooks || domain.artifacts.map((artifact) => `${artifact} production workflow`);
+  const automations = domain.saas?.automations || domain.checks.map((check) => `${check} guardrail`);
+  const customerSegments = asList(domain.saas?.customerSegments, ['Student pod operator', 'Mentor reviewer', 'Client owner']);
+  const pricingTiers = asList(domain.saas?.pricingTiers, ['Starter workspace', 'Team workspace', 'Agency workspace']);
+  const onboardingChecklist = asList(domain.saas?.onboardingChecklist, [
+    `Create ${domain.sampleClient || 'client'} workspace`,
+    `Import ${domain.tableTitle.toLowerCase()} evidence`,
+    'Assign reviewer and owner approval roles',
+    `Export ${domain.artifacts[0]} for first handoff`
+  ]);
+  const successMetrics = asList(domain.saas?.successMetrics, [
+    `${domain.metricLabels?.[0] || 'Primary score'} at or above 85`,
+    `${approvedRows}/${rows.length} rows approved`,
+    'Client-safe export generated without warnings'
+  ]);
+  const dashboards = asList(domain.saas?.dashboards, [
+    `${domain.tableTitle} readiness dashboard`,
+    'Owner approval queue',
+    'Evidence quality trends'
+  ]);
+  const dataModel = asList(domain.saas?.dataModel, [
+    'Workspace',
+    'Evidence row',
+    'Approval',
+    'Export artifact',
+    'Audit event'
+  ]);
+  const permissions = asList(domain.saas?.permissions, [
+    'Admin: workspace settings and billing',
+    'Editor: evidence capture and artifact drafting',
+    'Reviewer: approval gates and export release',
+    'Viewer: client-safe read-only packets'
+  ]);
+  const compliance = asList(domain.saas?.compliance, domain.checks.map((check) => `${check} is enforced before export`));
+  const lifecycle = asList(domain.saas?.lifecycle, [
+    'Discover',
+    'Configure',
+    'Validate',
+    'Approve',
+    'Export',
+    'Renew'
+  ]);
+  const retentionSignals = asList(domain.saas?.retentionSignals, [
+    'Open evidence risks',
+    'Upcoming approval renewals',
+    'Export freshness',
+    'Repeat workspace usage'
+  ]);
+  const exportChannels = asList(domain.saas?.exportChannels, domain.artifacts);
+  return {
+    stage,
+    health,
+    primaryContact,
+    completedRows,
+    approvedRows,
+    riskRows,
+    modules,
+    playbooks,
+    automations,
+    customerSegments,
+    pricingTiers,
+    onboardingChecklist,
+    successMetrics,
+    dashboards,
+    dataModel,
+    permissions,
+    compliance,
+    lifecycle,
+    retentionSignals,
+    exportChannels,
+    nextMilestones: [
+      `Complete ${Math.max(rows.length - completedRows, 0)} remaining ${domain.tableTitle.toLowerCase()} row(s).`,
+      `Approve ${Math.max(rows.length - approvedRows, 0)} row(s) with owner-safe evidence.`,
+      `Export ${domain.artifacts.join(', ')} for the client workspace.`,
+      `Review ${customerSegments.length} customer segment(s) and ${pricingTiers.length} pricing tier(s).`
+    ],
+    revenueModel: domain.saas?.revenueModel || 'Seat-based workspace with client-safe export packs',
+    integrationTargets: domain.saas?.integrationTargets || ['CSV export', 'Markdown handoff', 'JSON bundle'],
+    riskRegister: riskRows.map((row) => `${row.label}: score ${row.score}/10${row.approved ? '' : ', approval pending'}`)
+  };
+}
+
+export function buildSaasMarkdown(config, domain, state) {
+  const blueprint = createSaasBlueprint(domain, state);
+  const lines = [`# ${config.title} SaaS Operating Blueprint`, '', `**Stage:** ${blueprint.stage}`, `**Workspace health:** ${blueprint.health}/100`, `**Primary contact:** ${blueprint.primaryContact}`, `**Revenue model:** ${blueprint.revenueModel}`, '', '## SaaS Modules'];
+  blueprint.modules.forEach((module) => lines.push(`- **${module.name}:** ${module.description}`));
+  lines.push('', '## Customer segments');
+  blueprint.customerSegments.forEach((item) => lines.push(`- ${item}`));
+  lines.push('', '## Pricing and packaging');
+  blueprint.pricingTiers.forEach((item) => lines.push(`- ${item}`));
+  lines.push('', '## Onboarding checklist');
+  blueprint.onboardingChecklist.forEach((item) => lines.push(`- ${item}`));
+  lines.push('', '## Playbooks');
+  blueprint.playbooks.forEach((item) => lines.push(`- ${item}`));
+  lines.push('', '## Automations');
+  blueprint.automations.forEach((item) => lines.push(`- ${item}`));
+  lines.push('', '## Dashboards and success metrics');
+  blueprint.dashboards.forEach((item) => lines.push(`- Dashboard: ${item}`));
+  blueprint.successMetrics.forEach((item) => lines.push(`- Metric: ${item}`));
+  lines.push('', '## Data model and permissions');
+  blueprint.dataModel.forEach((item) => lines.push(`- Entity: ${item}`));
+  blueprint.permissions.forEach((item) => lines.push(`- Permission: ${item}`));
+  lines.push('', '## Lifecycle, retention, and compliance');
+  blueprint.lifecycle.forEach((item) => lines.push(`- Lifecycle step: ${item}`));
+  blueprint.retentionSignals.forEach((item) => lines.push(`- Retention signal: ${item}`));
+  blueprint.compliance.forEach((item) => lines.push(`- Compliance: ${item}`));
+  lines.push('', '## Automation and integration targets');
+  blueprint.integrationTargets.forEach((item) => lines.push(`- Integration: ${item}`));
+  blueprint.exportChannels.forEach((item) => lines.push(`- Export: ${item}`));
+  lines.push('', '## Milestones');
+  blueprint.nextMilestones.forEach((item) => lines.push(`- ${item}`));
+  lines.push('', '## Risk register');
+  if (blueprint.riskRegister.length) blueprint.riskRegister.forEach((item) => lines.push(`- ${item}`));
+  else lines.push('- No current SaaS launch risks.');
+  return lines.join('\n');
+}

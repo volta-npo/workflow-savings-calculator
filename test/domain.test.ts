@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { config } from '../src/config.js';
 import { domain } from '../src/domain.js';
-import { validateDomainDefinition, createDomainState, calculateDomain, generateDomainArtifacts, buildDomainMarkdown, applyDomainSample } from '../src/domain-core.js';
+import { validateDomainDefinition, createDomainState, calculateDomain, generateDomainArtifacts, buildDomainMarkdown, applyDomainSample, createSaasBlueprint, buildSaasMarkdown } from '../src/domain-core.js';
 
 test('domain tool definition is purpose-built', () => {
   assert.equal(validateDomainDefinition(domain), true);
@@ -26,4 +26,17 @@ test('domain artifacts and markdown are product-specific', () => {
   assert.equal(artifacts.length, domain.artifacts.length);
   assert.match(md, new RegExp(config.title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   assert.match(md, new RegExp(domain.title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+});
+
+
+test('domain exposes standalone SaaS operating model', () => {
+  const state = applyDomainSample(domain);
+  const blueprint = createSaasBlueprint(domain, state);
+  const markdown = buildSaasMarkdown(config, domain, state);
+  assert.ok(Array.isArray(domain.modules));
+  assert.ok(domain.modules.length >= 4);
+  assert.ok(blueprint.health >= 80);
+  assert.ok(blueprint.playbooks.length >= 4);
+  assert.match(markdown, /SaaS Operating Blueprint/);
+  assert.match(markdown, /Revenue model/);
 });

@@ -10,17 +10,38 @@ export declare const domain: {
         id: string;
         label: string;
         type: string;
-        sample: string;
+        sample: number;
         placeholder: string;
     } | {
         id: string;
         label: string;
         type: string;
-        sample: number;
+        sample: string;
         placeholder: string;
     })[];
     rows: string[];
     artifacts: string[];
     checks: string[];
     sampleClient: string;
+    modules: {
+        name: string;
+        description: string;
+    }[];
+    saas: {
+        customerSegments: string[];
+        pricingTiers: string[];
+        onboardingChecklist: string[];
+        successMetrics: string[];
+        dashboards: string[];
+        dataModel: string[];
+        permissions: string[];
+        compliance: string[];
+        lifecycle: string[];
+        retentionSignals: string[];
+        exportChannels: string[];
+        playbooks: string[];
+        automations: string[];
+        revenueModel: string;
+        integrationTargets: string[];
+    };
 };

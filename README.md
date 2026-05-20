@@ -244,7 +244,7 @@ Test coverage includes:
 │   ├── domain.js           # Domain-specific workbench definition
 │   ├── domain-core.js      # Domain calculations and artifacts
 │   ├── v1*.js              # v1 release layer
-│   └── release*.js         # release certification layer
+│   └── v3*.js              # v3 release certification layer
 ├── test/                   # 25 automated tests
 ├── docs/                   # Operations, QA, release checklist
 └── examples/               # Release bundle template

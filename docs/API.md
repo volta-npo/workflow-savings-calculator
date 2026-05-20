@@ -8,7 +8,7 @@ The browser app is local-first. Data is stored in the user's browser unless expl
 |---|---|---|
 | Product config | `src/config.ts` | Mission, rubric, sample scenario, privacy rules. |
 | Domain engine | `src/domain-core.ts` | Domain-specific calculations and generated artifacts. |
-| release certification | `src/release-core.ts` | Release gates, export/import, deterministic hashes. |
+| v3 release certification | `src/v3-core.ts` | Release gates, export/import, deterministic hashes. |
 
 ## Python backend HTTP API
 
