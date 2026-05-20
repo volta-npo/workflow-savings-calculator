@@ -11,7 +11,9 @@ function load() { try {
     if (raw)
         return JSON.parse(raw);
 }
-catch { } return createV3State(v3); }
+catch {
+    console.warn('Saved local data could not be read and was reset.');
+} return createV3State(v3); }
 function save() { state.updatedAt = new Date().toISOString(); localStorage.setItem(key, JSON.stringify(state)); }
 function download(name, content, type = 'text/plain') { const blob = new Blob([content], { type }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = name; a.click(); URL.revokeObjectURL(url); }
 function installV3() {

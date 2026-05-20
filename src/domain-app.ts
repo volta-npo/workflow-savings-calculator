@@ -7,7 +7,7 @@ let state = load();
 function $(s){return document.querySelector(s)}
 function $$(s){return [...document.querySelectorAll(s)]}
 function esc(v=''){return String(v).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
-function load(){try{const raw=localStorage.getItem(key); if(raw) return JSON.parse(raw)}catch{} return createDomainState(domain)}
+function load(){try{const raw=localStorage.getItem(key); if(raw) return JSON.parse(raw)}catch { console.warn('Saved local data could not be read and was reset.'); } return createDomainState(domain)}
 function save(){state.updatedAt=new Date().toISOString(); localStorage.setItem(key,JSON.stringify(state))}
 function download(name,content,type='text/plain'){const blob=new Blob([content],{type}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=name; a.click(); URL.revokeObjectURL(url)}
 function install(){

@@ -6,7 +6,7 @@ const key = `volta-oss:${config.slug}:v1`;
 let state = load();
 
 function load() {
-  try { const raw = localStorage.getItem(key); if (raw) return JSON.parse(raw); } catch {}
+  try { const raw = localStorage.getItem(key); if (raw) return JSON.parse(raw); } catch { console.warn('Saved local data could not be read and was reset.'); }
   return createV1State(v1);
 }
 function save() { state.updatedAt = new Date().toISOString(); localStorage.setItem(key, JSON.stringify(state)); }

@@ -9,7 +9,9 @@ function load() {
         if (raw)
             return JSON.parse(raw);
     }
-    catch { }
+    catch {
+        console.warn('Saved local data could not be read and was reset.');
+    }
     return createV1State(v1);
 }
 function save() { state.updatedAt = new Date().toISOString(); localStorage.setItem(key, JSON.stringify(state)); }
